@@ -21,15 +21,26 @@ export class CatalogService{
          return data;
      }
 
-    async updateProduct(input: Product){}
-   
-    getProducts(limit: number, offset: number){
+    async updateProduct(input: any){
+        const data =await this._repository.update(input);
+        //emit event to update record in elastic search
+        return data;
+    }
+   //instead of this get products from elastic search
+    async getProducts(limit: number, offset: number){
+        const products=await this._repository.find(limit, offset);
+        return products;
+    }
+
+
+    async getProduct(id: number){
+        const product=await this._repository.findOne(id);
+        return product;
         
     }
-    getProduct(id: number){
-        
-    }
-     deleteProduct(id: number){
-        
+    async deleteProduct(id: number){
+        const response=await this._repository.delete(id);
+        //delete record from elastic search as well
+        return response;
     }
 }
